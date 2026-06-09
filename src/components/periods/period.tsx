@@ -1,7 +1,10 @@
-import type { periodOfDayProps } from "@/types/periodTypes";
 import { CloudSun, Moon, Sun } from "lucide-react";
 import { AppointmentCard } from "@/components/appointment-card/appointment-card";
 import type { Appointment } from "@/generated/prisma/client";
+
+export interface periodOfDayProps {
+  periodOfDay?: "morning" | "afternoon" | "evening";
+}
 
 const dummyAppointments: Appointment[] = [
   {
