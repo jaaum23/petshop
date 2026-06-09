@@ -17,6 +17,9 @@ const interTight = Inter_Tight({
 export const metadata: Metadata = {
   title: "Mundo Pet",
   description: "Agende serviço de banho, tosa entre outros com a Mundo Pet",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -25,10 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="pt_BR"
-      className={`${inter.variable} ${interTight.variable} h-full antialiased`}
-    >
+    <html lang="pt_BR" className={`${inter.variable} ${interTight.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
