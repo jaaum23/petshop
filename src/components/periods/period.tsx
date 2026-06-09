@@ -1,5 +1,7 @@
-import { Appointment } from "@/generated/prisma/client";
-import { Sun } from "lucide-react";
+import type { periodOfDayProps } from "@/types/periodTypes";
+import { CloudSun, Moon, Sun } from "lucide-react";
+import { AppointmentCard } from "@/components/appointment-card/appointment-card";
+import type { Appointment } from "@/generated/prisma/client";
 
 const dummyAppointments: Appointment[] = [
   {
@@ -8,42 +10,85 @@ const dummyAppointments: Appointment[] = [
     petName: "Jade",
     phone: "21990774129",
     description: "Banho e Corte de Unha",
-    scheduledAt: new Date("2026-08-20T20:00:00"),
+    scheduledAt: new Date("2026-08-20T12:00:00Z"), // 09:00
+    createdAt: new Date(),
+  },
+  {
+    id: "2",
+    tutorName: "Raquel Alves",
+    petName: "Sophie",
+    phone: "21990774129",
+    description: "Banho e Tosa Completa",
+    scheduledAt: new Date("2026-08-20T13:00:00Z"), // 10:00
+    createdAt: new Date(),
+  },
+  {
+    id: "3",
+    tutorName: "João Pedro",
+    petName: "Trovão",
+    phone: "21964603413",
+    description: "Banho",
+    scheduledAt: new Date("2026-08-20T16:00:00Z"), // 13:00
+    createdAt: new Date(),
+  },
+  {
+    id: "4",
+    tutorName: "João Pedro",
+    petName: "Fubá",
+    phone: "21964603413",
+    description: "Banho",
+    scheduledAt: new Date("2026-08-20T17:00:00Z"), // 14:00
+    createdAt: new Date(),
+  },
+  {
+    id: "5",
+    tutorName: "Alexandre José",
+    petName: "Tigresa",
+    phone: "21964942371",
+    description: "Banho",
+    scheduledAt: new Date("2026-08-20T18:00:00Z"), // 15:00
     createdAt: new Date(),
   },
 ];
 
-export function Period() {
+const getHour = (appointment: Appointment) =>
+  Number(appointment.scheduledAt.toLocaleTimeString("pt-BR", { timeZone: "America/Sao_Paulo", hour: "2-digit" }));
+
+const morningAppointments = dummyAppointments.filter(
+  (appointment) => getHour(appointment) >= 9 && getHour(appointment) < 13,
+);
+const afternoonAppointments = dummyAppointments.filter(
+  (appointment) => getHour(appointment) >= 13 && getHour(appointment) < 19,
+);
+const eveningAppointments = dummyAppointments.filter(
+  (appointment) => getHour(appointment) >= 19 && getHour(appointment) < 22,
+);
+
+export function Period({ periodOfDay }: periodOfDayProps) {
   return (
     <div className="overflow-hidden rounded-[10px]">
       <div className="bg-background-tertiary flex items-center justify-between p-5">
         <div className="flex items-center gap-3">
-          <Sun color="var(--color-accent-blue)" size={24} />
-          <span className="text-label-large text-content-primary">Manhã</span>
-        </div>
-        <span className="text-label-large text-content-secondary">09h - 12h</span>
-      </div>
-      <div className="bg-background-tertiary border-t border-[#2E2C30] p-5">
-        <div className="text-content-primary flex items-center justify-between px-3">
-          <span className="text-label-medium">
-            {dummyAppointments[0].scheduledAt.toLocaleTimeString("pt-BR", {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+          {periodOfDay === "morning" && <Sun color="var(--color-accent-blue)" size={24} />}
+          {periodOfDay === "afternoon" && <CloudSun color="var(--color-accent-orange)" size={24} />}
+          {periodOfDay === "evening" && <Moon color="var(--color-accent-yellow)" size={24} />}
+          <span className="text-label-large text-content-primary">
+            {periodOfDay === "morning" && "Manhã"}
+            {periodOfDay === "afternoon" && "Tarde"}
+            {periodOfDay === "evening" && "Noite"}
           </span>
-          <span className="text-label-small">
-            {dummyAppointments[0].petName}{" "}
-            <span className="text-content-secondary text-paragraph-small">/ {dummyAppointments[0].tutorName}</span>
-          </span>
-          <span className="text-paragraph-small text-content-secondary">{dummyAppointments[0].description}</span>
-          <button
-            className="text-accent-red border-accent-red text-paragraph-small hover:bg-accent-red
-              hover:text-content-primary rounded-[5px] border px-2 py-1 transition-colors duration-200 ease-in-out"
-          >
-            Remover
-          </button>
         </div>
+        <span className="text-label-large text-content-secondary">
+          {periodOfDay === "morning" && "09h - 12h"}
+          {periodOfDay === "afternoon" && "13h - 18h"}
+          {periodOfDay === "evening" && "19h - 21h"}
+        </span>
       </div>
+      <ul className="bg-background-tertiary border-t border-[#2E2C30] p-5">
+        {periodOfDay === "morning" && <AppointmentCard appointmentsArray={morningAppointments} />}
+        {periodOfDay === "afternoon" && <AppointmentCard appointmentsArray={afternoonAppointments} />}
+        {periodOfDay === "evening" && <AppointmentCard appointmentsArray={eveningAppointments} />}
+      </ul>
     </div>
   );
 }

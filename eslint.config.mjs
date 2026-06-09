@@ -24,6 +24,7 @@ const eslintConfig = defineConfig([
       "no-relative-import-paths": noRelativeImportPaths,
     },
     rules: {
+      "@typescript-eslint/consistent-type-imports": "error",
       "no-relative-import-paths/no-relative-import-paths": [
         "error",
         {
