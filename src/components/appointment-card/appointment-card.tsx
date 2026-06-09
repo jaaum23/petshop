@@ -36,13 +36,22 @@ export function AppointmentCard({ appointmentsArray }: AppointmentCardsProps) {
       <span className="text-paragraph-small text-content-secondary w-full text-left sm:text-center">
         {appointment.description}
       </span>
-      <button
-        className="text-accent-red border-accent-red/20 text-paragraph-small hover:bg-accent-red
-          hover:text-content-primary active:bg-accent-red active:text-content-primary mt-3 h-8 w-full cursor-pointer
-          rounded-[5px] border px-2 py-1 transition-colors duration-200 ease-in-out sm:mt-0 sm:h-fit sm:w-fit"
-      >
-        Remover
-      </button>
+      <div className="flex w-full gap-3 sm:w-fit">
+        <button
+          className="text-content-primary border-content-secondary/20 text-paragraph-small hover:bg-content-secondary
+            active:bg-content-secondary active:text-content-primary mt-3 h-10 w-full cursor-pointer rounded-[5px] border
+            px-2 py-1 transition-colors duration-200 ease-in-out sm:mt-0 sm:h-fit sm:w-fit"
+        >
+          Editar
+        </button>
+        <button
+          className="text-accent-red border-accent-red/20 text-paragraph-small hover:bg-accent-red
+            hover:text-content-primary active:bg-accent-red active:text-content-primary mt-3 h-10 w-full cursor-pointer
+            rounded-[5px] border px-2 py-1 transition-colors duration-200 ease-in-out sm:mt-0 sm:h-fit sm:w-fit"
+        >
+          Remover
+        </button>
+      </div>
     </li>
   ));
 }
