@@ -15,32 +15,38 @@ export function AppointmentForm() {
   useEffect(() => {
     if (!isOpen) return;
 
-    document.addEventListener("mousedown", handleClickOutside);
     function handleClickOutside(e: MouseEvent) {
       if (!dialogRef.current?.contains(e.target as Node)) {
         setIsOpen(false);
       }
-
-      function handleEscape(e: KeyboardEvent) {
-        if (e.key === "Escape") {
-          setIsOpen(false);
-        }
-      }
-      document.addEventListener("keydown", handleEscape);
-
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-        document.removeEventListener("keydown", handleEscape);
-      };
     }
+
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   return (
     <>
       <Button title="NOVO AGENDAMENTO" variant="brand" onClick={() => openDialog()} />
       {isOpen && (
-        <div className="fixed top-0 left-0 z-20 flex h-screen w-full items-center justify-center backdrop-blur-sm">
-          <div ref={dialogRef} className="bg-background-tertiary z-40 h-fit w-125 rounded-[12px] p-10 shadow-2xl">
+        <div className="fixed top-0 left-0 z-20 flex h-screen w-full items-center justify-center backdrop-blur-md">
+          <div
+            ref={dialogRef}
+            className="bg-background-tertiary z-40 h-fit w-[90vw] rounded-[12px] px-5 py-10 shadow-2xl sm:w-125 sm:p-10"
+          >
             <h2 className="text-title text-content-primary">Agende um atendimento</h2>
             <p className="text-paragraph-medium text-content-secondary mt-1">
               Preencha os dados do cliente para realizar o agendamento:
