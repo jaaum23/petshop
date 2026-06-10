@@ -3,6 +3,18 @@ import { PawPrint, Phone, SquareChartGantt, User } from "lucide-react";
 import { FormField } from "@/components/appointment-form/form-field";
 import Button from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
+import z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const appointmentFormSchema = z.object({
+  tutorName: z.string().min(1, "Campo obrigatório."),
+  petName: z.string().min(1, "Campo obrigatório."),
+  phone: z.string().length(11, "O telefone deve ter 11 dígitos."),
+  description: z.string().min(1, "Campo obrigatório."),
+});
+
+type AppointmentFormTypes = z.infer<typeof appointmentFormSchema>;
 
 export function AppointmentForm() {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,11 +50,32 @@ export function AppointmentForm() {
     };
   }, [isOpen]);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<AppointmentFormTypes>({
+    resolver: zodResolver(appointmentFormSchema),
+  });
+
+  function controlledSubmit(data: AppointmentFormTypes) {
+    console.log(data);
+  }
+
+  function resetForm() {
+    setIsOpen(false);
+    reset();
+  }
+
   return (
     <>
       <Button title="NOVO AGENDAMENTO" variant="brand" onClick={() => openDialog()} />
       {isOpen && (
-        <div className="fixed top-0 left-0 z-20 flex h-screen w-full items-center justify-center backdrop-blur-md">
+        <div
+          className="fixed top-0 left-0 z-20 flex h-screen w-full items-center justify-center bg-black/30
+            backdrop-blur-md"
+        >
           <div
             ref={dialogRef}
             className="bg-background-tertiary z-40 h-fit w-[90vw] rounded-[12px] px-5 py-10 shadow-2xl sm:w-125 sm:p-10"
@@ -51,16 +84,43 @@ export function AppointmentForm() {
             <p className="text-paragraph-medium text-content-secondary mt-1">
               Preencha os dados do cliente para realizar o agendamento:
             </p>
-            <div className="mt-7 flex flex-col items-end gap-6">
-              <FormField title="Nome do tutor" placeholder="Raquel Alves" icon={User} />
-              <FormField title="Nome do pet" placeholder="Jade" icon={PawPrint} />
-              <FormField title="Telefone" placeholder="(00) 0 0000-0000" icon={Phone} />
-              <FormField title="Serviço" placeholder="Banho e tosa" icon={SquareChartGantt} />
-              <div className="flex w-full gap-4">
-                <Button title="CANCELAR" variant="cancelForm" type="button" onClick={() => setIsOpen(false)} />
+            <form
+              onSubmit={(e) => void handleSubmit(controlledSubmit)(e)}
+              className="mt-7 flex flex-col items-end gap-6"
+            >
+              <FormField
+                {...register("tutorName")}
+                title="Nome do tutor"
+                placeholder="Raquel Alves"
+                icon={User}
+                errorMessage={errors.tutorName?.message}
+              />
+              <FormField
+                {...register("petName")}
+                title="Nome do pet"
+                placeholder="Jade"
+                icon={PawPrint}
+                errorMessage={errors.petName?.message}
+              />
+              <FormField
+                {...register("phone")}
+                title="Telefone"
+                placeholder="21912345678"
+                icon={Phone}
+                errorMessage={errors.phone?.message}
+              />
+              <FormField
+                {...register("description")}
+                title="Serviço"
+                placeholder="Banho e tosa"
+                icon={SquareChartGantt}
+                errorMessage={errors.description?.message}
+              />
+              <div className="mt-2 flex w-full gap-4">
+                <Button title="CANCELAR" variant="cancelForm" type="button" onClick={() => resetForm()} />
                 <Button title="AGENDAR" variant="submitForm" type="submit" />
               </div>
-            </div>
+            </form>
           </div>
         </div>
       )}

@@ -5,13 +5,17 @@ interface FormFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   title: string;
   placeholder: string;
   icon: LucideIcon;
+  errorMessage?: string;
 }
 
-export function FormField({ title, placeholder, icon: Icon, ...rest }: FormFieldProps) {
+export function FormField({ title, placeholder, icon: Icon, errorMessage, ...rest }: FormFieldProps) {
   return (
     <div className="w-full">
-      <span className="text-label-medium text-content-primary">{title}</span>
-      <div className="relative">
+      <div>
+        <span className="text-label-medium text-content-primary">{title}</span>
+        <span className="text-paragraph-small text-accent-red ml-2">{errorMessage}</span>
+      </div>
+      <div className="relative mt-1">
         <Icon className="absolute bottom-1 left-3 -translate-y-1/2" size={20} color="var(--color-content-brand)" />
         <input
           {...rest}
