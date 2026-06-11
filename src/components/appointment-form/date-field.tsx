@@ -4,6 +4,8 @@ import { Calendar, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { DayPicker } from "@daypicker/react";
 import "react-day-picker/style.css";
+import "@/styles/calendar.css";
+import { ptBR } from "date-fns/locale";
 
 export function DateField() {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,8 +40,12 @@ export function DateField() {
           mode="single"
           selected={selected}
           onSelect={setSelected}
+          animate
           navLayout="around"
           showOutsideDays
+          timeZone="America/Sao_Paulo"
+          locale={ptBR}
+          ISOWeek
         />
       )}
     </div>
