@@ -1,8 +1,9 @@
 "use client";
-import { PawPrint, Phone, SquareChartGantt, User } from "lucide-react";
+import { DateField } from "@/components/appointment-form/date-field";
 import { FormField } from "@/components/appointment-form/form-field";
 import Button from "@/components/ui/button";
-import { useEffect, useRef, useState } from "react";
+import { PawPrint, Phone, SquareChartGantt, User } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 const appointmentFormSchema = z.object({
   tutorName: z.string().min(1, "Campo obrigatório."),
   petName: z.string().min(1, "Campo obrigatório."),
-  phone: z.string().length(11, "O telefone deve ter 11 dígitos."),
+  phone: z.string().regex(/^\d{11}$/, "O telefone deve ter 11 dígitos."),
   description: z.string().min(1, "Campo obrigatório."),
 });
 
@@ -23,32 +24,6 @@ export function AppointmentForm() {
     setIsOpen(!isOpen);
   }
   const dialogRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    function handleClickOutside(e: MouseEvent) {
-      if (!dialogRef.current?.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-
-    function handleEscape(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        setIsOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
 
   const {
     register,
@@ -63,10 +38,36 @@ export function AppointmentForm() {
     console.log(data);
   }
 
-  function resetForm() {
+  const resetForm = useCallback(() => {
     setIsOpen(false);
     reset();
-  }
+  }, [reset]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function handleClickOutside(e: MouseEvent) {
+      if (!dialogRef.current?.contains(e.target as Node)) {
+        resetForm();
+      }
+    }
+
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        resetForm();
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "";
+    };
+  }, [isOpen, resetForm]);
 
   return (
     <>
@@ -78,7 +79,7 @@ export function AppointmentForm() {
         >
           <div
             ref={dialogRef}
-            className="bg-background-tertiary z-40 h-fit w-[90vw] rounded-[12px] px-5 py-10 shadow-2xl sm:w-125 sm:p-10"
+            className="bg-background-tertiary z-40 h-fit w-[90vw] rounded-xl px-5 py-10 shadow-2xl sm:w-125 sm:p-10"
           >
             <h2 className="text-title text-content-primary">Agende um atendimento</h2>
             <p className="text-paragraph-medium text-content-secondary mt-1">
@@ -104,6 +105,7 @@ export function AppointmentForm() {
               />
               <FormField
                 {...register("phone")}
+                inputMode="numeric"
                 title="Telefone"
                 placeholder="21912345678"
                 icon={Phone}
@@ -116,6 +118,10 @@ export function AppointmentForm() {
                 icon={SquareChartGantt}
                 errorMessage={errors.description?.message}
               />
+              <div className="flex w-full items-center gap-4">
+                <DateField />
+                <DateField />
+              </div>
               <div className="mt-2 flex w-full gap-4">
                 <Button title="CANCELAR" variant="cancelForm" type="button" onClick={() => resetForm()} />
                 <Button title="AGENDAR" variant="submitForm" type="submit" />
