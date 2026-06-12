@@ -8,6 +8,7 @@ import z from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { startOfToday } from "date-fns";
+import Select from "@/components/ui/select";
 
 const appointmentFormSchema = z.object({
   tutorName: z.string().min(1, "Campo obrigatório."),
@@ -15,6 +16,7 @@ const appointmentFormSchema = z.object({
   phone: z.string().regex(/^\d{11}$/, "O telefone deve ter 11 dígitos."),
   description: z.string().min(1, "Campo obrigatório."),
   scheduledAt: z.date("Selecione uma data.").min(startOfToday(), "Selecione uma data válida."),
+  time: z.string(),
 });
 
 type AppointmentFormTypes = z.infer<typeof appointmentFormSchema>;
@@ -132,6 +134,27 @@ export function AppointmentForm() {
                       onChange={field.onChange}
                       errorMessage={errors.scheduledAt?.message}
                     />
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name="time"
+                  render={({ field }) => (
+                    <Select value={field.value} onChange={field.onChange}>
+                      <Select.Trigger placeholder="Seleione..." />
+
+                      <Select.Content>
+                        <Select.Item value="item1" label="Item 1">
+                          Item 1
+                        </Select.Item>
+                        <Select.Item value="item2" label="Item 2">
+                          Item 2
+                        </Select.Item>
+                        <Select.Item value="item3" label="Item 3">
+                          Item 3
+                        </Select.Item>
+                      </Select.Content>
+                    </Select>
                   )}
                 />
               </div>
