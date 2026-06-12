@@ -5,14 +5,16 @@ import Button from "@/components/ui/button";
 import { PawPrint, Phone, SquareChartGantt, User } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import z from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { startOfToday } from "date-fns";
 
 const appointmentFormSchema = z.object({
   tutorName: z.string().min(1, "Campo obrigatório."),
   petName: z.string().min(1, "Campo obrigatório."),
   phone: z.string().regex(/^\d{11}$/, "O telefone deve ter 11 dígitos."),
   description: z.string().min(1, "Campo obrigatório."),
+  scheduledAt: z.date("Selecione uma data.").min(startOfToday(), "Selecione uma data válida."),
 });
 
 type AppointmentFormTypes = z.infer<typeof appointmentFormSchema>;
@@ -30,6 +32,7 @@ export function AppointmentForm() {
     handleSubmit,
     formState: { errors },
     reset,
+    control,
   } = useForm<AppointmentFormTypes>({
     resolver: zodResolver(appointmentFormSchema),
   });
@@ -119,8 +122,18 @@ export function AppointmentForm() {
                 errorMessage={errors.description?.message}
               />
               <div className="flex w-full items-center gap-4">
-                <DateField />
-                <DateField />
+                <Controller
+                  control={control}
+                  name="scheduledAt"
+                  render={({ field }) => (
+                    <DateField
+                      title="Data"
+                      value={field.value}
+                      onChange={field.onChange}
+                      errorMessage={errors.scheduledAt?.message}
+                    />
+                  )}
+                />
               </div>
               <div className="mt-2 flex w-full gap-4">
                 <Button title="CANCELAR" variant="cancelForm" type="button" onClick={() => resetForm()} />

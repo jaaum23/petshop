@@ -1,31 +1,61 @@
 "use client";
-import { format } from "date-fns";
+import { format, startOfToday } from "date-fns";
 import { Calendar, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DayPicker } from "@daypicker/react";
 import "react-day-picker/style.css";
 import "@/styles/calendar.css";
 import { ptBR } from "date-fns/locale";
 
-export function DateField() {
+interface DateFieldProps {
+  title: string;
+  value?: Date;
+  onChange: (date?: Date) => void;
+  errorMessage?: string;
+}
+
+export function DateField({ title, value, onChange, errorMessage }: DateFieldProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState<Date>();
 
   function openCalendar() {
     setIsOpen(!isOpen);
   }
 
+  const calendarRef = useRef<HTMLDivElement>(null);
+  const openCalendarBtn = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function handleClickOutside(e: MouseEvent) {
+      if (!calendarRef.current?.contains(e.target as Node) && !openCalendarBtn.current?.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
     <div className="relative w-full">
-      <span className="text-label-medium text-content-primary">Data</span>
+      <div className="flex w-full items-center justify-between">
+        <span className="text-label-medium text-content-primary">{title}</span>
+        <span className="text-paragraph-small text-accent-red ml-2">{errorMessage}</span>
+      </div>
       <div
+        ref={openCalendarBtn}
         onClick={() => openCalendar()}
         className="border-border-primary hover:border-border-secondary mt-1 flex h-12 cursor-pointer items-center
           justify-between rounded-lg border px-4 transition-colors duration-200 ease-in-out"
       >
         <div className="flex items-center">
           <Calendar size={20} color="var(--color-content-brand)" className="mr-3" />
-          <span className="text-content-secondary">{format(new Date(), "dd/MM/yyyy")}</span>
+          <span className={`${value ? "text-content-primary" : "text-content-secondary"}`}>
+            {value ? value?.toLocaleDateString("pt-BR") : format(new Date(), "dd/MM/yyyy")}
+          </span>
         </div>
         <ChevronDown
           size={20}
@@ -35,18 +65,23 @@ export function DateField() {
       </div>
 
       {isOpen && (
-        <DayPicker
-          className="bg-background-tertiary border-border-primary absolute! bottom-0 z-5 mb-13 rounded-lg border"
-          mode="single"
-          selected={selected}
-          onSelect={setSelected}
-          animate
-          navLayout="around"
-          showOutsideDays
-          timeZone="America/Sao_Paulo"
-          locale={ptBR}
-          ISOWeek
-        />
+        <div ref={calendarRef}>
+          <DayPicker
+            className="bg-background-tertiary border-border-primary absolute! bottom-0 z-5 mb-13 rounded-lg border"
+            mode="single"
+            selected={value}
+            onSelect={(date) => {
+              onChange(date);
+              setIsOpen(false);
+            }}
+            navLayout="around"
+            showOutsideDays
+            timeZone="America/Sao_Paulo"
+            locale={ptBR}
+            ISOWeek
+            disabled={(date) => date < startOfToday()}
+          />
+        </div>
       )}
     </div>
   );
