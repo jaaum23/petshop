@@ -42,6 +42,11 @@
   --text-title--font-weight: 700;
 
   /* --- Inter ---------------------------------------------------- */
+  /* paragraph large — 14px / 24px / Medium */
+  --text-paragraph-large: 16px;
+  --text-paragraph-large--line-height: 24px;
+  --text-paragraph-large--font-weight: 500;
+
   /* paragraph medium — 14px / 24px / Medium */
   --text-paragraph-medium: 14px;
   --text-paragraph-medium--line-height: 24px;

@@ -2,7 +2,7 @@
 import { DateField } from "@/components/appointment-form/date-field";
 import { FormField } from "@/components/appointment-form/form-field";
 import Button from "@/components/ui/button";
-import { PawPrint, Phone, SquareChartGantt, User } from "lucide-react";
+import { Clock, PawPrint, Phone, SquareChartGantt, User } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import z from "zod";
 import { useForm, Controller } from "react-hook-form";
@@ -136,27 +136,43 @@ export function AppointmentForm() {
                     />
                   )}
                 />
-                <Controller
-                  control={control}
-                  name="time"
-                  render={({ field }) => (
-                    <Select value={field.value} onChange={field.onChange}>
-                      <Select.Trigger placeholder="Seleione..." />
+                <div className="relative h-fit w-full">
+                  <div className="flex w-full items-center justify-between">
+                    <span className="text-label-medium text-content-primary">Horário</span>
+                    <span className="text-paragraph-small text-accent-red ml-2"></span>
+                  </div>
+                  <Controller
+                    control={control}
+                    name="time"
+                    render={({ field }) => (
+                      <Select value={field.value} onChange={field.onChange}>
+                        <Select.Trigger
+                          className="text-content-brand mt-1 flex h-12 w-full cursor-pointer items-center
+                            justify-between rounded-lg border px-4"
+                          placeholder="Selecione..."
+                          icon={Clock}
+                        />
 
-                      <Select.Content>
-                        <Select.Item value="item1" label="Item 1">
-                          Item 1
-                        </Select.Item>
-                        <Select.Item value="item2" label="Item 2">
-                          Item 2
-                        </Select.Item>
-                        <Select.Item value="item3" label="Item 3">
-                          Item 3
-                        </Select.Item>
-                      </Select.Content>
-                    </Select>
-                  )}
-                />
+                        <Select.Content
+                          className="bg-background-tertiary border-border-primary absolute bottom-13 w-full rounded-lg
+                            border p-2"
+                        >
+                          {scheduleHoursArray.map((item) => (
+                            <Select.Item
+                              key={item}
+                              className="hover:bg-content-brand text-content-primary h-fit w-full rounded-sm px-2 py-1
+                                transition-colors duration-100 ease-in-out"
+                              value="item1"
+                              label="Item 1"
+                            >
+                              {item}
+                            </Select.Item>
+                          ))}
+                        </Select.Content>
+                      </Select>
+                    )}
+                  />
+                </div>
               </div>
               <div className="mt-2 flex w-full gap-4">
                 <Button title="CANCELAR" variant="cancelForm" type="button" onClick={() => resetForm()} />
@@ -169,3 +185,17 @@ export function AppointmentForm() {
     </>
   );
 }
+
+function generateScheduleHours() {
+  const options = [];
+
+  for (let hour = 9; hour <= 21; hour++) {
+    for (let minute = 0; minute < 60; minute += 30) {
+      if (hour === 21 && minute === 30) break;
+      const option = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+      options.push(option);
+    }
+  }
+  return options;
+}
+const scheduleHoursArray = generateScheduleHours();

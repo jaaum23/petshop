@@ -48,12 +48,13 @@ export function DateField({ title, value, onChange, errorMessage }: DateFieldPro
       <div
         ref={openCalendarBtn}
         onClick={() => openCalendar()}
-        className="border-border-primary hover:border-border-secondary mt-1 flex h-12 cursor-pointer items-center
-          justify-between rounded-lg border px-4 transition-colors duration-200 ease-in-out"
+        className={`mt-1 flex h-12 cursor-pointer items-center justify-between rounded-lg border px-4 transition-colors
+          duration-200 ease-in-out
+          ${isOpen ? "border-border-brand" : "border-border-primary hover:border-border-secondary"}`}
       >
         <div className="flex items-center">
           <Calendar size={20} color="var(--color-content-brand)" className="mr-3" />
-          <span className={`${value ? "text-content-primary" : "text-content-secondary"}`}>
+          <span className={`text-paragraph-large ${value ? "text-content-primary" : "text-content-secondary"}`}>
             {value ? value?.toLocaleDateString("pt-BR") : format(new Date(), "dd/MM/yyyy")}
           </span>
         </div>
