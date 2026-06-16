@@ -1,5 +1,6 @@
 import type { Appointment } from "@/generated/prisma/client";
-import Button from "@/components/ui/button";
+import { AppointmentForm } from "@/components/appointment-form";
+import DeleteButton from "@/components/ui/delete-button";
 
 interface AppointmentCardsProps {
   appointmentsArray: Appointment[];
@@ -38,8 +39,8 @@ export function AppointmentCard({ appointmentsArray }: AppointmentCardsProps) {
         {appointment.description}
       </span>
       <div className="mt-3 flex w-full gap-3 sm:mt-0 sm:w-fit">
-        <Button title="Editar" variant="default" />
-        <Button title="Remover" variant="destructive" />
+        <AppointmentForm variant="edit" appointment={appointment} />
+        <DeleteButton appointment={appointment} />
       </div>
     </li>
   ));

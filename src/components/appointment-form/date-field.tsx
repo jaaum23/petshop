@@ -77,7 +77,6 @@ export function DateField({ title, value, onChange, errorMessage }: DateFieldPro
             }}
             navLayout="around"
             showOutsideDays
-            timeZone="America/Sao_Paulo"
             locale={ptBR}
             ISOWeek
             disabled={(date) => date < startOfToday()}

@@ -59,10 +59,12 @@ export default function Select({ children, value, onChange }: SelectProps) {
 
 function Trigger({
   placeholder,
+  value,
   className,
   icon: Icon,
 }: {
   placeholder: string;
+  value?: string;
   className?: string;
   icon: LucideIcon;
 }) {
@@ -80,8 +82,8 @@ function Trigger({
     >
       <div className="flex items-center gap-3">
         <Icon size={20} color="var(--color-content-brand)" />
-        {label ? (
-          <span className="text-paragraph-large text-content-primary">{label}</span>
+        {label || value ? (
+          <span className="text-paragraph-large text-content-primary">{label ?? value}</span>
         ) : (
           <span className="text-paragraph-large text-content-secondary">{placeholder}</span>
         )}

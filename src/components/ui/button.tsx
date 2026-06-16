@@ -15,9 +15,9 @@ export default function Button({ title, variant, ...rest }: ButtonProps) {
     if (variant === "brand")
       return "bg-background-brand active:text-content-primary hover:bg-background-highlights active:bg-background-highlights text-content-button text-label-large h-12 w-fit cursor-pointer rounded-[8px] px-6 py-3 uppercase transition-colors duration-200 ease-in-out";
     if (variant === "submitForm")
-      return "bg-background-brand hover:bg-background-highlights active:text-content-primary active:bg-background-highlights text-content-button text-label-large h-12 w-full cursor-pointer rounded-[8px] px-6 py-3 uppercase transition-colors duration-200 ease-in-out";
+      return "bg-background-brand hover:bg-background-highlights active:text-content-primary active:bg-background-highlights text-content-button text-label-large h-12 w-full cursor-pointer rounded-lg px-6 py-3 uppercase transition-colors duration-200 ease-in-out";
     if (variant === "cancelForm")
-      return "border border-accent-red/20 text-accent-red hover:bg-accent-red active:bg-accent-red hover:text-content-primary active:text-content-primary text-label-large h-12 w-full cursor-pointer rounded-[8px] px-6 py-3 uppercase transition-colors duration-200 ease-in-out";
+      return "border border-accent-red/20 text-accent-red hover:bg-accent-red active:bg-accent-red hover:text-content-primary active:text-content-primary text-label-large h-12 w-full cursor-pointer rounded-lg px-6 py-3 uppercase transition-colors duration-200 ease-in-out";
   }
 
   return (

@@ -1,12 +1,15 @@
 import { CloudSun, Moon, Sun } from "lucide-react";
 import { AppointmentCard } from "@/components/appointment-card";
 import { morningAppointments, afternoonAppointments, eveningAppointments } from "@/utils";
+import { GetAppointments } from "@/server";
 
 export interface periodOfDayProps {
   periodOfDay?: "morning" | "afternoon" | "evening";
 }
 
-export function Period({ periodOfDay }: periodOfDayProps) {
+export async function Period({ periodOfDay }: periodOfDayProps) {
+  const appointmentsArray = await GetAppointments();
+
   return (
     <div className="overflow-hidden rounded-[10px]">
       <div className="bg-background-tertiary flex items-center justify-between p-5">
@@ -27,9 +30,11 @@ export function Period({ periodOfDay }: periodOfDayProps) {
         </span>
       </div>
       <ul className="bg-background-tertiary border-t border-[#2E2C30] p-5">
-        {periodOfDay === "morning" && <AppointmentCard appointmentsArray={morningAppointments} />}
-        {periodOfDay === "afternoon" && <AppointmentCard appointmentsArray={afternoonAppointments} />}
-        {periodOfDay === "evening" && <AppointmentCard appointmentsArray={eveningAppointments} />}
+        {periodOfDay === "morning" && <AppointmentCard appointmentsArray={morningAppointments(appointmentsArray)} />}
+        {periodOfDay === "afternoon" && (
+          <AppointmentCard appointmentsArray={afternoonAppointments(appointmentsArray)} />
+        )}
+        {periodOfDay === "evening" && <AppointmentCard appointmentsArray={eveningAppointments(appointmentsArray)} />}
       </ul>
     </div>
   );
