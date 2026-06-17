@@ -1,7 +1,7 @@
 import { AppointmentForm } from "@/components/appointment-form";
 import { Period } from "@/components/periods";
 import DataFilter from "@/components/ui/date-filter";
-import { parseISO, startOfDay } from "date-fns";
+import { startOfDay } from "date-fns";
 import Image from "next/image";
 
 interface HomeProps {
@@ -10,7 +10,7 @@ interface HomeProps {
 
 export default async function Home({ searchParams }: HomeProps) {
   const { date } = await searchParams;
-  const filteredDate = date ? parseISO(date) : startOfDay(new Date());
+  const filteredDate = date ? new Date(date) : startOfDay(new Date());
 
   return (
     <>
