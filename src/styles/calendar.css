@@ -1,5 +1,6 @@
 .rdp-root {
   --rdp-outside-opacity: 0.4;
+  --rdp-day_button-border-radius: 0;
 }
 
 .rdp-chevron {
@@ -17,10 +18,16 @@
 }
 
 .rdp-day_button {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   color: var(--color-content-primary);
   font-size: 14px;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.rdp-day:not(.rdp-disabled) .rdp-day_button:hover {
+  background-color: #98959d33;
 }
 
 .rdp-day {
@@ -30,6 +37,7 @@
 
 .rdp-weekday {
   text-transform: capitalize;
+  width: 40px;
   color: var(--color-content-secondary);
   padding: 0;
 }
@@ -37,25 +45,25 @@
 .rdp-month_caption {
   height: fit-content;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 .rdp-month {
-  padding: 8px;
+  padding: 16px 12px;
 }
 
 .rdp-root[data-nav-layout="around"] .rdp-button_previous {
   width: 28px;
   height: 28px;
-  top: 5px;
-  left: 5px;
+  top: 12px;
+  left: 16px;
 }
 
 .rdp-root[data-nav-layout="around"] .rdp-button_next {
   width: 28px;
   height: 28px;
-  top: 5px;
-  right: 5px;
+  top: 12px;
+  right: 16px;
 }
 
 .rdp-selected .rdp-day_button {

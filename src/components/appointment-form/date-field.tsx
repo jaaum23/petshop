@@ -8,7 +8,7 @@ import "@/styles/calendar.css";
 import { ptBR } from "date-fns/locale";
 
 interface DateFieldProps {
-  title: string;
+  title?: string;
   value?: Date;
   onChange: (date?: Date) => void;
   errorMessage?: string;

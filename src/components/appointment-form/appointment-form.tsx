@@ -17,7 +17,7 @@ const appointmentFormSchema = z
   .object({
     tutorName: z.string().min(1, "Campo obrigatório."),
     petName: z.string().min(1, "Campo obrigatório."),
-    phone: z.string().regex(/^\d{11}$/, "O telefone deve ter 11 dígitos."),
+    phone: z.string().regex(/^\d{11}$/, "O telefone deve ter 11 números."),
     description: z.string().min(1, "Campo obrigatório."),
     scheduledAt: z.date("Selecione uma data.").min(startOfToday(), "Selecione uma data válida."),
     time: z.string("Selecione um horário."),
@@ -30,7 +30,7 @@ const appointmentFormSchema = z
     },
     {
       path: ["time"],
-      error: "Horário inválido.",
+      error: "O horário já passou.",
     },
   );
 
@@ -181,7 +181,7 @@ export function AppointmentForm({ variant, appointment }: AppointmentFormProps) 
                 icon={SquareChartGantt}
                 errorMessage={errors.description?.message}
               />
-              <div className="flex w-full items-center gap-4">
+              <div className="flex w-full flex-col items-center gap-6 sm:flex-row sm:gap-4">
                 <Controller
                   control={control}
                   name="scheduledAt"
@@ -224,8 +224,8 @@ export function AppointmentForm({ variant, appointment }: AppointmentFormProps) 
                           {scheduleHoursArray.map((item) => (
                             <Select.Item
                               key={item}
-                              className="hover:bg-content-brand text-content-primary h-fit w-full rounded-sm px-2 py-1
-                                transition-colors duration-100 ease-in-out"
+                              className="hover:bg-content-brand text-content-primary h-fit w-full cursor-default
+                                rounded-sm px-2 py-1"
                               value={item}
                               label={item}
                             >

@@ -42,8 +42,12 @@ export default function DeleteButton({ appointment }: DeleteButtonProps) {
       }
     }
 
+    document.body.style.overflow = "hidden";
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "";
     };
   }, [isOpen]);
 
@@ -72,7 +76,7 @@ export default function DeleteButton({ appointment }: DeleteButtonProps) {
             </p>
             <div className="mt-5 flex w-full gap-3">
               <button
-                className="border-border-primary text-content-primary hover:bg-content-secondary h-12 w-full
+                className="border-border-primary text-content-primary hover:bg-content-tertiary h-12 w-full
                   cursor-pointer rounded-lg border transition-colors duration-200 ease-in-out"
                 onClick={() => setIsOpen(false)}
               >

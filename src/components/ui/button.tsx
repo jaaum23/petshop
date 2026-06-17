@@ -9,7 +9,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export default function Button({ title, variant, ...rest }: ButtonProps) {
   function setVariant() {
     if (variant === "default")
-      return "text-content-primary border-content-secondary/20 text-paragraph-small hover:bg-content-secondary active:bg-content-secondary active:text-content-primary h-10 w-full cursor-pointer rounded-[5px] border px-2 py-1 transition-colors duration-200 ease-in-out sm:h-fit sm:w-fit";
+      return "text-content-primary border-content-secondary/20 text-paragraph-small hover:bg-content-tertiary active:bg-content-secondary active:text-content-primary h-10 w-full cursor-pointer rounded-[5px] border px-2 py-1 transition-colors duration-200 ease-in-out sm:h-fit sm:w-fit";
     if (variant === "destructive")
       return "text-accent-red border-accent-red/20 text-paragraph-small hover:bg-accent-red hover:text-content-primary active:bg-accent-red active:text-content-primary h-10 w-full cursor-pointer rounded-[5px] border px-2 py-1 transition-colors duration-200 ease-in-out sm:h-fit sm:w-fit";
     if (variant === "brand")

@@ -5,10 +5,11 @@ import { GetAppointments } from "@/server";
 
 export interface periodOfDayProps {
   periodOfDay?: "morning" | "afternoon" | "evening";
+  filteredDate: Date;
 }
 
-export async function Period({ periodOfDay }: periodOfDayProps) {
-  const appointmentsArray = await GetAppointments();
+export async function Period({ periodOfDay, filteredDate }: periodOfDayProps) {
+  const appointmentsArray = await GetAppointments(filteredDate);
 
   return (
     <div className="overflow-hidden rounded-[10px]">

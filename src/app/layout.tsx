@@ -30,9 +30,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt_BR" className={`${inter.variable} ${interTight.variable} font-inter h-full antialiased`}>
-      <body className="flex min-h-full flex-col">
+      <body className="bg-background-primary flex min-h-full flex-col">
         {children}
-        <Toaster position="bottom-right" />
+        <Toaster position="top-right" />
       </body>
     </html>
   );
