@@ -23,6 +23,7 @@ export function AppointmentCard({ appointmentsArray }: AppointmentCardsProps) {
     >
       <span className="text-label-medium flex w-full items-center gap-3 sm:w-fit">
         {appointment.scheduledAt.toLocaleTimeString("pt-BR", {
+          timeZone: "America/Sao_Paulo",
           hour: "2-digit",
           minute: "2-digit",
         })}

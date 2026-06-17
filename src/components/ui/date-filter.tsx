@@ -3,11 +3,13 @@
 import { DayPicker } from "@daypicker/react";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { ptBR } from "date-fns/locale";
-import { addDays, format, startOfToday, subDays } from "date-fns";
+import { addDays, format, subDays } from "date-fns";
 import "react-day-picker/style.css";
 import "@/styles/calendar.css";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+
+const BR_OFFSET = "-03:00";
 
 interface DateFilterProps {
   selectedDate: Date;
@@ -15,6 +17,7 @@ interface DateFilterProps {
 
 export default function DateFilter({ selectedDate }: DateFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const dateOfToday = format(new Date(), "yyyy-MM-dd");
 
   const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -48,11 +51,13 @@ export default function DateFilter({ selectedDate }: DateFilterProps) {
     router.push(`?date=${format(clickedDate, "yyyy-MM-dd")}`);
   }
 
+  const canGoBack = format(selectedDate, "yyyy-MM-dd") > dateOfToday;
+
   function navigateDate(action: "add" | "sub") {
     if (action === "add") {
       return setSelectedDate(addDays(selectedDate, 1));
     }
-    if (action === "sub" && selectedDate > startOfToday()) {
+    if (action === "sub" && canGoBack) {
       return setSelectedDate(subDays(selectedDate, 1));
     }
   }
@@ -65,10 +70,10 @@ export default function DateFilter({ selectedDate }: DateFilterProps) {
       >
         <button
           onClick={() => navigateDate("sub")}
-          className={`flex aspect-square h-10 ${selectedDate > startOfToday() ? "cursor-pointer" : "cursor-not-allowed"}
-            items-center justify-center transition-colors duration-200 ease-in-out`}
+          className={`flex aspect-square h-10 ${canGoBack ? "cursor-pointer" : "cursor-not-allowed"} items-center
+            justify-center transition-colors duration-200 ease-in-out`}
         >
-          <ChevronLeft size={16} color={selectedDate > startOfToday() ? "var(--color-content-primary)" : "#98959d66"} />
+          <ChevronLeft size={16} color={canGoBack ? "var(--color-content-primary)" : "#98959d66"} />
         </button>
 
         <button
@@ -101,7 +106,7 @@ export default function DateFilter({ selectedDate }: DateFilterProps) {
             showOutsideDays
             locale={ptBR}
             ISOWeek
-            disabled={(date) => date < startOfToday()}
+            disabled={(date) => date < new Date(`${dateOfToday}T00:00:00.000${BR_OFFSET}`)}
           />
         )}
       </div>

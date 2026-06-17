@@ -1,11 +1,13 @@
 "use client";
-import { format, startOfToday } from "date-fns";
+import { format } from "date-fns";
 import { Calendar, ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { DayPicker } from "@daypicker/react";
 import "react-day-picker/style.css";
 import "@/styles/calendar.css";
 import { ptBR } from "date-fns/locale";
+
+const BR_OFFSET = "-03:00";
 
 interface DateFieldProps {
   title?: string;
@@ -16,6 +18,7 @@ interface DateFieldProps {
 
 export function DateField({ title, value, onChange, errorMessage }: DateFieldProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const dateOfToday = format(new Date(), "yyyy-MM-dd");
 
   function openCalendar() {
     setIsOpen(!isOpen);
@@ -79,7 +82,7 @@ export function DateField({ title, value, onChange, errorMessage }: DateFieldPro
             showOutsideDays
             locale={ptBR}
             ISOWeek
-            disabled={(date) => date < startOfToday()}
+            disabled={(date) => date < new Date(`${dateOfToday}T00:00:00.000${BR_OFFSET}`)}
           />
         </div>
       )}

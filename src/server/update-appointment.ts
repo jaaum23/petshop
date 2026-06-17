@@ -25,8 +25,14 @@ export async function UpdateAppointment(id: string, editedData: AppointmentType)
       };
     }
 
-    const scheduledHours = parsedEditedData.data?.scheduledAt.getHours();
-    if (scheduledHours && scheduledHours < 9 && scheduledHours > 21) {
+    const scheduledHours = Number(
+      parsedEditedData.data.scheduledAt.toLocaleTimeString("pt-BR", {
+        timeZone: "America/Sao_Paulo",
+        hour: "2-digit",
+        hour12: false,
+      }),
+    );
+    if (scheduledHours < 9 || scheduledHours > 21) {
       return {
         error: "Insira um horário válido.",
       };

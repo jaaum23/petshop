@@ -1,8 +1,9 @@
 import { AppointmentForm } from "@/components/appointment-form";
 import { Period } from "@/components/periods";
 import DataFilter from "@/components/ui/date-filter";
-import { startOfDay } from "date-fns";
 import Image from "next/image";
+
+const BR_OFFSET = "-03:00";
 
 interface HomeProps {
   searchParams: Promise<{ date?: string }>;
@@ -10,7 +11,7 @@ interface HomeProps {
 
 export default async function Home({ searchParams }: HomeProps) {
   const { date } = await searchParams;
-  const filteredDate = date ? new Date(date) : startOfDay(new Date());
+  const filteredDate = date ? new Date(`${date}T12:00:00${BR_OFFSET}`) : new Date();
 
   return (
     <>
